@@ -3,792 +3,1355 @@
 <head>
   <meta charset="UTF-8" />
   <title>Ormonov · Навигатор по блогу</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     :root {
-      --bg: #020617;            /* тёмно-синий фон */
-      --bg-elevated: #02081a;
-      --border: #1f2933;
-      --text-main: #f9fafb;
-      --text-muted: #9ca3af;
-      --accent: #fbbf24;        /* золото */
-      --accent-soft: rgba(251,191,36,0.12);
+      --bg-main: #050816;
+      --bg-elevated: #0c1020;
+      --bg-card: #111629;
+      --bg-soft: #181e33;
+      --accent: #ffb347;
+      --accent-soft: #ffcf7a;
+      --accent-secondary: #4f8dff;
+      --text-main: #f7fafc;
+      --text-muted: #a6b0c3;
+      --border-subtle: rgba(255, 255, 255, 0.06);
+      --radius-xl: 24px;
+      --radius-lg: 18px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.6);
+      --shadow-chip: 0 6px 18px rgba(0, 0, 0, 0.5);
+      --transition-fast: 0.18s ease-out;
     }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-      background: radial-gradient(circle at top, #0b1220 0, #020617 45%, #000 100%);
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: radial-gradient(circle at top left, #192043 0, #050816 55%, #020308 100%);
       color: var(--text-main);
       min-height: 100vh;
       display: flex;
-      flex-direction: column;
+      justify-content: center;
     }
 
     .app {
-      max-width: 640px;
-      margin: 0 auto;
-      padding: 16px 16px 80px;
       width: 100%;
+      max-width: 1040px;
+      min-height: 100vh;
+      padding: 16px 16px 80px;
+      position: relative;
     }
 
-    .screen { display: none; animation: fadeIn .2s ease-out; }
-    .screen.active { display: block; }
+    /* HERO */
 
-    header {
-      margin-bottom: 14px;
+    .hero {
+      background: radial-gradient(circle at top left, #222a4a 0, #0b0f1e 50%, #050816 100%);
+      border-radius: 32px;
+      padding: 18px 18px 20px;
       display: flex;
-      gap: 12px;
       align-items: center;
+      gap: 14px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      margin-bottom: 14px;
     }
 
-    .avatar {
-      width: 46px;
-      height: 46px;
-      border-radius: 999px;
-      background: radial-gradient(circle at 30% 0, #fef3c7, #1f2937);
+    .hero-avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: conic-gradient(from 210deg, #ffb347, #ff7e7e, #4f8dff, #ffb347);
+      padding: 3px;
+      flex-shrink: 0;
+    }
+
+    .hero-avatar-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: #050816;
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 700;
-      font-size: 20px;
-      color: #020617;
-      border: 2px solid rgba(251,191,36,0.8);
-      box-shadow: 0 0 20px rgba(251,191,36,0.25);
+      font-size: 22px;
+      color: var(--accent-soft);
     }
 
-    .title-block h1 {
+    .hero-main {
+      flex: 1;
+    }
+
+    .hero-title {
       font-size: 18px;
       font-weight: 700;
+      letter-spacing: 0.03em;
+      margin-bottom: 4px;
     }
 
-    .title-block p {
+    .hero-subtitle {
       font-size: 12px;
       color: var(--text-muted);
-      margin-top: 2px;
+      margin-bottom: 8px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: var(--radius-pill);
+      padding: 5px 10px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      font-size: 11px;
+      color: var(--accent-soft);
+    }
+
+    .hero-badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #facc15 0, #f97316 45%, #b45309 100%);
+      box-shadow: 0 0 10px rgba(250, 204, 21, 0.8);
+    }
+
+    /* SEARCH */
+
+    .search-block {
+      margin: 10px 0 16px;
+    }
+
+    .search-input {
+      width: 100%;
+      background: rgba(15, 23, 42, 0.85);
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border-subtle);
+      padding: 10px 14px;
+      color: var(--text-main);
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .search-input input {
+      border: none;
+      outline: none;
+      background: transparent;
+      color: inherit;
+      font-size: inherit;
+      width: 100%;
+    }
+
+    .search-input span {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    /* FILTER CHIPS */
+
+    .filter-chips {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      margin-bottom: 14px;
+    }
+
+    .chip {
+      flex-shrink: 0;
+      border-radius: var(--radius-pill);
+      padding: 6px 13px;
+      font-size: 12px;
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      background: rgba(15, 23, 42, 0.75);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background var(--transition-fast), color var(--transition-fast),
+        border-color var(--transition-fast), transform var(--transition-fast),
+        box-shadow var(--transition-fast);
+    }
+
+    .chip span.emoji {
+      font-size: 14px;
+    }
+
+    .chip.active {
+      background: radial-gradient(circle at top left, #ffb347 0, #f97316 40%, #a855f7 100%);
+      color: #111827;
+      border-color: transparent;
+      box-shadow: var(--shadow-chip);
+      transform: translateY(-1px);
+    }
+
+    /* SECTION TITLES */
+
+    .section {
+      margin-bottom: 18px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      font-size: 13px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(148, 163, 184, 0.9);
+    }
+
+    .section-subtitle {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    /* NAVIGATOR GRID */
+
+    .nav-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+    }
+
+    .nav-card {
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.75));
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-subtle);
+      padding: 10px 11px;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast),
+        border-color var(--transition-fast), background var(--transition-fast);
+    }
+
+    .nav-card::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      opacity: 0;
+      background: radial-gradient(circle at top right, rgba(255, 179, 71, 0.12), transparent 55%);
+      transition: opacity var(--transition-fast);
+    }
+
+    .nav-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 32px rgba(0, 0, 0, 0.65);
+      border-color: rgba(248, 250, 252, 0.08);
+    }
+
+    .nav-card:hover::before {
+      opacity: 1;
+    }
+
+    .nav-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .nav-card-badge {
+      font-size: 9px;
+      text-transform: uppercase;
+      color: rgba(148, 163, 184, 0.95);
+      letter-spacing: 0.16em;
+    }
+
+    .nav-card-count {
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    .nav-card-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .nav-card-description {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .nav-card-emoji {
+      position: absolute;
+      right: 10px;
+      bottom: 10px;
+      font-size: 22px;
+      opacity: 0.8;
+    }
+
+    /* POSTS */
+
+    .posts-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .post-card {
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.9));
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid var(--border-subtle);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .post-card-header {
+      position: relative;
+      height: 140px;
+      background: radial-gradient(circle at top left, #4f8dff, #111827 55%, #020617 100%);
+      display: flex;
+      align-items: flex-end;
+      padding: 10px 12px;
+      overflow: hidden;
+    }
+
+    .post-card-header::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top right, rgba(255, 179, 71, 0.17), transparent 55%);
+      opacity: 0.8;
+      pointer-events: none;
+    }
+
+    .post-card-emoji {
+      position: absolute;
+      right: 10px;
+      top: 8px;
+      font-size: 28px;
+      z-index: 1;
+    }
+
+    .post-card-tag {
+      position: relative;
+      z-index: 2;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      font-size: 11px;
+      color: var(--accent-soft);
+    }
+
+    .post-card-body {
+      padding: 10px 12px 12px;
+    }
+
+    .post-card-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .post-card-excerpt {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .post-card-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .post-card-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn {
+      flex: 1;
+      border-radius: 999px;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 7px 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: background var(--transition-fast), transform var(--transition-fast),
+        box-shadow var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #ffb347, #f97316);
+      color: #111827;
+      box-shadow: 0 10px 25px rgba(248, 181, 80, 0.45);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 30px rgba(248, 181, 80, 0.6);
+    }
+
+    .btn-ghost {
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--text-main);
+      border: 1px solid rgba(148, 163, 184, 0.6);
+    }
+
+    .btn-ghost.active {
+      background: rgba(248, 250, 252, 0.95);
+      color: #111827;
+      border-color: transparent;
+    }
+
+    .btn-ghost:hover {
+      transform: translateY(-1px);
+    }
+
+    /* MODAL */
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.85);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 30;
+      padding: 16px;
+    }
+
+    .modal {
+      width: 100%;
+      max-width: 520px;
+      background: #020617;
+      border-radius: 24px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      box-shadow: 0 24px 80px rgba(15, 23, 42, 0.9);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      max-height: 92vh;
+    }
+
+    .modal-header {
+      padding: 12px 16px 6px;
+      background: radial-gradient(circle at top left, #1f2937, #020617 60%);
+    }
+
+    .modal-header-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .modal-header-meta {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .modal-body {
+      padding: 10px 16px 12px;
+      font-size: 13px;
+      color: var(--text-main);
+    }
+
+    .modal-footer {
+      padding: 10px 16px 14px;
+      display: flex;
+      gap: 8px;
+      border-top: 1px solid rgba(31, 41, 55, 0.9);
+      background: #020617;
+    }
+
+    .modal-close {
+      position: absolute;
+      right: 14px;
+      top: 10px;
+      font-size: 14px;
+      cursor: pointer;
+      color: var(--text-muted);
+    }
+
+    /* VIEWS */
+
+    .view {
+      display: none;
+    }
+
+    .view.active {
+      display: block;
+    }
+
+    /* ABOUT & SERVICES & FAVORITES */
+
+    .card-page {
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.93));
+      border-radius: 22px;
+      border: 1px solid var(--border-subtle);
+      padding: 14px 14px 16px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65);
+      margin-bottom: 18px;
+    }
+
+    .page-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .page-subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    .list {
+      list-style: none;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .list li {
+      margin-bottom: 6px;
     }
 
     .badge-inline {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 3px 8px;
       border-radius: 999px;
-      border: 1px solid rgba(251,191,36,0.45);
-      background: rgba(15,23,42,0.9);
-      font-size: 10px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      padding: 4px 9px;
+      font-size: 11px;
       margin-top: 6px;
-      color: var(--accent);
     }
 
-    .badge-dot {
-      width: 6px;
-      height: 6px;
+    .link-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
       border-radius: 999px;
-      background: var(--accent);
-    }
-
-    .search { margin: 10px 0 8px; }
-
-    .search input {
-      width: 100%;
-      padding: 9px 12px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: rgba(15,23,42,0.9);
-      color: var(--text-main);
-      font-size: 14px;
-      outline: none;
-    }
-
-    .search input::placeholder { color: #6b7280; }
-
-    .chips {
-      display: flex;
-      flex-wrap: nowrap;
-      overflow-x: auto;
-      gap: 8px;
-      padding: 4px 0 12px;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    .chip {
-      padding: 6px 12px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
+      padding: 5px 10px;
       font-size: 12px;
-      white-space: nowrap;
-      cursor: pointer;
-      background: rgba(15,23,42,0.9);
-      color: var(--text-muted);
-      flex-shrink: 0;
-    }
-
-    .chip.active {
-      background: var(--accent);
-      border-color: var(--accent);
-      color: #111827;
-      font-weight: 600;
-    }
-
-    .section-label {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-muted);
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      color: var(--accent-soft);
+      text-decoration: none;
+      margin-right: 8px;
       margin-bottom: 6px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
     }
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0,1fr));
-      gap: 12px;
+    .link-chip:hover {
+      background: rgba(15, 23, 42, 1);
     }
 
-    .card {
-      position: relative;
-      border-radius: 16px;
-      padding: 14px;
-      background:
-        radial-gradient(circle at top left, rgba(15,23,42,0.0), transparent 55%),
-        linear-gradient(145deg, rgba(15,23,42,0.96), #020617);
-      border: 1px solid rgba(30,64,175,0.6);
-      overflow: hidden;
-      min-height: 92px;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      box-shadow: 0 0 0 1px rgba(15,23,42,0.7), 0 20px 35px rgba(15,23,42,0.9);
-    }
+    /* BOTTOM NAV */
 
-    .card::before {
-      content: "";
-      position: absolute;
-      inset: -40%;
-      background: radial-gradient(circle at 0 0, rgba(251,191,36,0.16), transparent 55%);
-      opacity: 0.9;
-      pointer-events: none;
-    }
-
-    .card > * { position: relative; z-index: 1; }
-
-    .card-title {
-      font-size: 14px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-
-    .card-sub {
-      font-size: 11px;
-      color: var(--text-muted);
-      margin-top: 4px;
-    }
-
-    .card-count {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      padding: 3px 8px;
-      border-radius: 999px;
-      background: rgba(15,23,42,0.97);
-      border: 1px solid rgba(148,163,184,0.6);
-      font-size: 11px;
-      color: var(--accent);
-    }
-
-    .card-tag {
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: rgba(249,250,251,0.6);
-    }
-
-    .subsection { margin-top: 18px; }
-
-    .list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-top: 8px;
-    }
-
-    .item {
-      padding: 10px 12px;
-      border-radius: 12px;
-      background: rgba(15,23,42,0.92);
-      border: 1px solid #111827;
-      cursor: pointer;
-    }
-
-    .item-title {
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 3px;
-    }
-
-    .item-meta {
-      font-size: 11px;
-      color: var(--text-muted);
-    }
-
-    .item:hover {
-      border-color: rgba(251,191,36,0.6);
-      background: radial-gradient(circle at top left, rgba(251,191,36,0.12), rgba(15,23,42,0.95));
-    }
-
-    .screen-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 12px;
-    }
-
-    .back-btn {
-      width: 30px;
-      height: 30px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      background: rgba(15,23,42,0.9);
-      font-size: 16px;
-    }
-
-    .screen-title {
-      font-size: 18px;
-      font-weight: 700;
-    }
-
-    /* Нижнее меню */
     .bottom-nav {
       position: fixed;
-      bottom: 0;
       left: 0;
       right: 0;
-      background: rgba(3,7,18,0.98);
-      border-top: 1px solid #111827;
-      padding: 6px 8px 10px;
-      display: flex;
-      justify-content: space-around;
-      max-width: 640px;
-      margin: 0 auto;
+      bottom: 0;
+      padding: 7px 12px 10px;
+      backdrop-filter: blur(20px);
+      background: linear-gradient(to top, rgba(3, 7, 18, 0.98), rgba(3, 7, 18, 0.85));
+      border-top: 1px solid rgba(15, 23, 42, 0.95);
+      z-index: 20;
     }
 
-    .nav-btn {
+    .bottom-nav-inner {
+      max-width: 1040px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      gap: 4px;
+    }
+
+    .nav-item {
       flex: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
       gap: 2px;
-      font-size: 11px;
-      color: #6b7280;
+      font-size: 10px;
+      color: var(--text-muted);
       cursor: pointer;
-      padding: 4px 0;
+      padding: 6px 4px 5px;
+      border-radius: 999px;
+      transition: background var(--transition-fast), color var(--transition-fast),
+        transform var(--transition-fast);
     }
 
-    .nav-btn span {
+    .nav-item span.icon {
       font-size: 16px;
     }
 
-    .nav-btn.active {
-      color: var(--accent);
-      font-weight: 600;
+    .nav-item.active {
+      background: radial-gradient(circle at top, #ffb347, #f97316 60%, #a855f7 100%);
+      color: #111827;
+      transform: translateY(-1px);
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(4px); }
-      to   { opacity: 1; transform: translateY(0); }
+    /* RESPONSIVE */
+
+    @media (min-width: 768px) {
+      .hero-title {
+        font-size: 19px;
+      }
+
+      .hero-subtitle {
+        font-size: 13px;
+      }
+
+      .search-block {
+        margin-top: 14px;
+      }
+
+      .post-card {
+        flex-direction: row;
+      }
+
+      .post-card-header {
+        width: 40%;
+        height: auto;
+        min-height: 140px;
+      }
+
+      .post-card-body {
+        width: 60%;
+      }
     }
   </style>
 </head>
 <body>
   <div class="app">
-    <!-- Главный экран -->
-    <div id="homeScreen" class="screen active">
-      <header>
-        <div class="avatar">O</div>
-        <div class="title-block">
-          <h1>Ormonov · Навигатор по блогу</h1>
-          <p>Маркетинг, мышление и рост. 5+ лет опыта, 100+ проектов.</p>
-          <div class="badge-inline">
-            <div class="badge-dot"></div>
-            Маркетинг · трафик · мышление · кейсы
+    <!-- HOME VIEW -->
+    <section class="view active" id="view-home">
+      <div class="hero">
+        <div class="hero-avatar">
+          <div class="hero-avatar-inner">O</div>
+        </div>
+        <div class="hero-main">
+          <div class="hero-title">Ormonov · Навигатор по блогу</div>
+          <div class="hero-subtitle">
+            Маркетинг, мышление и спорт. 5+ лет опыта, 100+ проектов.
+          </div>
+          <div class="hero-badge">
+            <div class="hero-badge-dot"></div>
+            <span>Маркетинг · трафик · мысли · кейсы</span>
           </div>
         </div>
-      </header>
-
-      <div class="search">
-        <input id="searchInput" type="text" placeholder="Поиск по материалам..." />
       </div>
 
-      <div class="chips" id="chips">
-        <div class="chip active" data-filter="all">Все</div>
-        <div class="chip" data-filter="marketing">Маркетинг</div>
-        <div class="chip" data-filter="sales">Кейсы</div>
-        <div class="chip" data-filter="thinking">Мысли</div>
-        <div class="chip" data-filter="ai">Книги & Идеи</div>
-      </div>
-
-      <div class="section-label">Разделы навигатора</div>
-      <div class="grid" id="cardsGrid"></div>
-
-      <div class="subsection">
-        <div class="section-label">Недавно добавлено</div>
-        <div class="list" id="recentList"></div>
-      </div>
-    </div>
-
-    <!-- Экран раздела -->
-    <div id="sectionScreen" class="screen">
-      <div class="screen-header">
-        <div class="back-btn" id="backBtn">←</div>
-        <div class="screen-title" id="sectionTitle">Раздел</div>
-      </div>
-      <p id="sectionDescription" style="font-size:12px;color:#9ca3af;margin-bottom:8px;"></p>
-      <div class="list" id="sectionList"></div>
-    </div>
-
-    <!-- О бренде -->
-    <div id="aboutScreen" class="screen">
-      <div class="screen-header">
-        <div class="screen-title">Обо мне</div>
-      </div>
-      <p style="font-size:13px;color:#d1d5db;margin-bottom:10px;">
-        Меня зовут Азиз Ормонов. Уже более 5 лет занимаюсь интернет-маркетингом: 
-        от SMM и таргета до построения отделов продаж, скриптов и продюсирования проектов.
-      </p>
-      <p style="font-size:13px;color:#d1d5db;margin-bottom:10px;">
-        У меня было агентство с командой из 5 человек, на пике мы вели по 15–20 проектов в месяц.
-        За это время я участвовал в запуске 100+ проектов: государственные заказы, фестивали, бизнесы,
-        продажа курсов и обучение маркетингу.
-      </p>
-      <p style="font-size:13px;color:#9ca3af;">
-        В этом навигаторе собраны мои кейсы, мысли, книги, гайды и услуги — всё, что помогает
-        предпринимателям расти и мыслить шире.
-      </p>
-    </div>
-
-    <!-- Комьюнити / чаты -->
-    <div id="chatsScreen" class="screen">
-      <div class="screen-header">
-        <div class="screen-title">Каналы и комьюнити</div>
-      </div>
-      <div class="list">
-        <div class="item">
-          <div class="item-title">Основной канал</div>
-          <div class="item-meta">Навигация по постам, кейсам, мыслям и материалам.</div>
-        </div>
-        <div class="item">
-          <div class="item-title">Будущий закрытый клуб</div>
-          <div class="item-meta">Чат для тех, кто пойдёт глубже в маркетинг и рост.</div>
+      <!-- SEARCH -->
+      <div class="search-block">
+        <div class="search-input">
+          <span>🔎</span>
+          <input
+            id="search-input"
+            type="search"
+            placeholder="Поиск по материалам..."
+          />
         </div>
       </div>
-    </div>
 
-    <!-- Избранное (заглушка) -->
-    <div id="favoritesScreen" class="screen">
-      <div class="screen-header">
-        <div class="screen-title">Избранное</div>
+      <!-- FILTER CHIPS -->
+      <div class="filter-chips">
+        <button class="chip active" data-filter="all">
+          <span class="emoji">✨</span>
+          <span>Все</span>
+        </button>
+        <button class="chip" data-filter="marketing">
+          <span class="emoji">📈</span>
+          <span>Маркетинг</span>
+        </button>
+        <button class="chip" data-filter="cases">
+          <span class="emoji">📂</span>
+          <span>Кейсы</span>
+        </button>
+        <button class="chip" data-filter="mindset">
+          <span class="emoji">💭</span>
+          <span>Мысли</span>
+        </button>
+        <button class="chip" data-filter="books">
+          <span class="emoji">📚</span>
+          <span>Книги & Идеи</span>
+        </button>
       </div>
-      <p style="font-size:13px;color:#9ca3af;">
-        Здесь позже можно будет выделить ключевые материалы, обязательные к прочтению.
-      </p>
-    </div>
 
-    <!-- Поддержка / сотрудничество -->
-    <div id="supportScreen" class="screen">
-      <div class="screen-header">
-        <div class="screen-title">Сотрудничество и заявки</div>
+      <!-- NAVIGATOR SECTIONS -->
+      <section class="section">
+        <div class="section-header">
+          <div>
+            <div class="section-title">Разделы навигатора</div>
+            <div class="section-subtitle">
+              Быстрый доступ ко всем рубрикам блога.
+            </div>
+          </div>
+        </div>
+        <div class="nav-grid" id="nav-grid">
+          <div class="nav-card" data-filter-target="marketing">
+            <div class="nav-card-top">
+              <div>
+                <div class="nav-card-badge">MARKETING</div>
+                <div class="nav-card-title">Маркетинг</div>
+              </div>
+              <div class="nav-card-count" id="count-marketing">0</div>
+            </div>
+            <div class="nav-card-description">
+              Реклама, трафик, стратегии и рост бизнеса.
+            </div>
+            <div class="nav-card-emoji">📈</div>
+          </div>
+
+          <div class="nav-card" data-filter-target="cases">
+            <div class="nav-card-top">
+              <div>
+                <div class="nav-card-badge">CASES</div>
+                <div class="nav-card-title">Кейсы и работа</div>
+              </div>
+              <div class="nav-card-count" id="count-cases">0</div>
+            </div>
+            <div class="nav-card-description">
+              Реальные проекты, цифры и результаты.
+            </div>
+            <div class="nav-card-emoji">📂</div>
+          </div>
+
+          <div class="nav-card" data-filter-target="mindset">
+            <div class="nav-card-top">
+              <div>
+                <div class="nav-card-badge">MINDSET</div>
+                <div class="nav-card-title">Мысли и жизнь</div>
+              </div>
+              <div class="nav-card-count" id="count-mindset">0</div>
+            </div>
+            <div class="nav-card-description">
+              Личное, философия, привычки, наблюдения.
+            </div>
+            <div class="nav-card-emoji">💭</div>
+          </div>
+
+          <div class="nav-card" data-filter-target="books">
+            <div class="nav-card-top">
+              <div>
+                <div class="nav-card-badge">BOOKS</div>
+                <div class="nav-card-title">Книги и фильмы</div>
+              </div>
+              <div class="nav-card-count" id="count-books">0</div>
+            </div>
+            <div class="nav-card-description">
+              Книги, которые читаю, и фильмы, которые рекомендую.
+            </div>
+            <div class="nav-card-emoji">📚</div>
+          </div>
+
+          <div class="nav-card" data-filter-target="guides">
+            <div class="nav-card-top">
+              <div>
+                <div class="nav-card-badge">GUIDES</div>
+                <div class="nav-card-title">Гайды и инструменты</div>
+              </div>
+              <div class="nav-card-count" id="count-guides">0</div>
+            </div>
+            <div class="nav-card-description">
+              Файлы, чек-листы и инструменты, которые можно применить сразу.
+            </div>
+            <div class="nav-card-emoji">🧩</div>
+          </div>
+
+          <div class="nav-card" data-filter-target="services">
+            <div class="nav-card-top">
+              <div>
+                <div class="nav-card-badge">SERVICES</div>
+                <div class="nav-card-title">Услуги</div>
+              </div>
+              <div class="nav-card-count">3</div>
+            </div>
+            <div class="nav-card-description">
+              Мои услуги в маркетинге и трафике для бизнеса.
+            </div>
+            <div class="nav-card-emoji">💼</div>
+          </div>
+
+          <div class="nav-card" data-filter-target="contacts">
+            <div class="nav-card-top">
+              <div>
+                <div class="nav-card-badge">CONTACTS</div>
+                <div class="nav-card-title">Контакты</div>
+              </div>
+              <div class="nav-card-count">∞</div>
+            </div>
+            <div class="nav-card-description">
+              Все способы связаться и поддержать проекты.
+            </div>
+            <div class="nav-card-emoji">✉️</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- RECENT POSTS -->
+      <section class="section">
+        <div class="section-header">
+          <div>
+            <div class="section-title">Недавно добавлено</div>
+            <div class="section-subtitle">
+              Свежие заметки, кейсы и мысли из канала.
+            </div>
+          </div>
+        </div>
+        <div class="posts-list" id="recent-posts">
+          <!-- Карточки постов будут подставляться из JS -->
+        </div>
+      </section>
+    </section>
+
+    <!-- ABOUT VIEW -->
+    <section class="view" id="view-about">
+      <div class="card-page">
+        <div class="page-title">Обо мне</div>
+        <div class="page-subtitle">
+          Азиз Ормонов, 25 лет. Более 5 лет в интернет-маркетинге, 100+ реализованных
+          проектов от малого бизнеса до крупных фестивалей и госструктур.
+        </div>
+        <ul class="list">
+          <li>• От SMM-специалиста и таргетолога до продюсера и построения отделов продаж.</li>
+          <li>• Агентство с командой 5 человек, на пике — 15–20 проектов в месяц.</li>
+          <li>• 50+ продающих сайтов и лендингов, которые продолжают приносить прибыль.</li>
+          <li>• 20+ учеников, которые ушли во фриланс, агентства и свои проекты.</li>
+        </ul>
+        <div class="badge-inline">
+          <span>🏃‍♂️ Спорт</span>
+          <span>📚 Книги</span>
+          <span>🚀 Рост</span>
+        </div>
       </div>
-      <p style="font-size:13px;color:#d1d5db;margin-bottom:10px;">
-        Если вам нужен трафик, стратегия, продюсирование или продвижение мероприятий —
-        здесь можно оставить заявку и связаться со мной.
-      </p>
-      <div class="list">
-        <div class="item">
-          <div class="item-title">Заявка на работу со мной</div>
-          <div class="item-meta">Сформулируйте запрос: бизнес, задачи, ожидания — и отправьте в Telegram.</div>
+
+      <div class="card-page">
+        <div class="page-title">Где меня найти</div>
+        <div class="page-subtitle">
+          Подписывайся, если хочешь видеть больше кейсов, мыслей и разборов.
+        </div>
+        <div>
+          <a class="link-chip" href="https://t.me/ormonovpro" target="_blank" rel="noopener">
+            📲 Telegram-канал
+          </a>
+          <!-- сюда позже можно добавить Instagram, VK и др. -->
+        </div>
+      </div>
+    </section>
+
+    <!-- FAVORITES VIEW -->
+    <section class="view" id="view-favorites">
+      <div class="card-page">
+        <div class="page-title">Избранное</div>
+        <div class="page-subtitle">
+          Здесь сохраняются посты, которые ты отметил ⭐ в навигаторе.
+        </div>
+        <div id="favorites-list" class="posts-list"></div>
+        <div id="favorites-empty" style="font-size:12px;color:var(--text-muted);margin-top:6px;display:none;">
+          Пока здесь пусто. Открой вкладку «Домой» и добавь пару постов в избранное.
+        </div>
+      </div>
+    </section>
+
+    <!-- SERVICES VIEW -->
+    <section class="view" id="view-services">
+      <div class="card-page">
+        <div class="page-title">Услуги</div>
+        <div class="page-subtitle">
+          Помогаю бизнесу вырастить трафик, заявки и прибыль за счёт системного
+          маркетинга и работы с воронкой.
+        </div>
+        <ul class="list">
+          <li>
+            <strong>1. Настройка и ведение рекламы</strong><br />
+            Яндекс, ВКонтакте, Telegram, YouTube и другие площадки. От анализа ниши
+            до масштабирования связок.
+          </li>
+          <li>
+            <strong>2. Диагностика бизнеса</strong><br />
+            Разбор целевой аудитории, маркетинга и текущей воронки. Выявляем точки роста
+            и собираем план действий.
+          </li>
+          <li>
+            <strong>3. Личная консультация</strong><br />
+            Разбор твоих кампаний, продуктов и стратегии. Честная обратная связь и
+            конкретные шаги, что делать дальше.
+          </li>
+        </ul>
+        <div style="margin-top:10px;">
+          <a class="link-chip" href="https://t.me/ormonovpro" target="_blank" rel="noopener">
+            🤝 Написать в Telegram
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CHANNEL VIEW -->
+    <section class="view" id="view-channel">
+      <div class="card-page">
+        <div class="page-title">Канал Ormonov·Про маркетинг</div>
+        <div class="page-subtitle">
+          Канал о маркетинге, проектах, с которыми работаю, лайфхаках, спорте и жизни.
+        </div>
+        <p style="font-size:12px;color:var(--text-muted);margin-bottom:10px;">
+          Если ты хочешь смотреть разборы в реальном времени, следить за новыми кейсами и
+          получать длинные мысли, — основное движение происходит там.
+        </p>
+        <a class="link-chip" href="https://t.me/ormonovpro" target="_blank" rel="noopener">
+          🔗 Перейти в канал
+        </a>
+      </div>
+    </section>
+
+    <!-- MODAL -->
+    <div class="modal-backdrop" id="modal-backdrop">
+      <div class="modal" id="modal">
+        <div class="modal-header">
+          <div class="modal-header-title" id="modal-title"></div>
+          <div class="modal-header-meta" id="modal-meta"></div>
+          <div class="modal-close" id="modal-close">✕</div>
+        </div>
+        <div class="modal-body" id="modal-body"></div>
+        <div class="modal-footer">
+          <button class="btn btn-ghost" id="modal-fav-btn">
+            ⭐ В избранное
+          </button>
+          <button class="btn btn-primary" id="modal-read-btn">
+            Читать
+          </button>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Нижнее меню -->
-  <div class="bottom-nav">
-    <div class="nav-btn active" data-screen="homeScreen">
-      <span>🏠</span>Домой
-    </div>
-    <div class="nav-btn" data-screen="aboutScreen">
-      <span>👤</span>Обо мне
-    </div>
-    <div class="nav-btn" data-screen="chatsScreen">
-      <span>💬</span>Каналы
-    </div>
-    <div class="nav-btn" data-screen="favoritesScreen">
-      <span>⭐</span>Избранное
-    </div>
-    <div class="nav-btn" data-screen="supportScreen">
-      <span>🛡️</span>Услуги
-    </div>
+    <!-- BOTTOM NAV -->
+    <nav class="bottom-nav">
+      <div class="bottom-nav-inner">
+        <div class="nav-item active" data-view="home">
+          <span class="icon">🏠</span>
+          <span>Домой</span>
+        </div>
+        <div class="nav-item" data-view="about">
+          <span class="icon">👤</span>
+          <span>Обо мне</span>
+        </div>
+        <div class="nav-item" data-view="channel">
+          <span class="icon">📡</span>
+          <span>Канал</span>
+        </div>
+        <div class="nav-item" data-view="favorites">
+          <span class="icon">⭐</span>
+          <span>Избранное</span>
+        </div>
+        <div class="nav-item" data-view="services">
+          <span class="icon">💼</span>
+          <span>Услуги</span>
+        </div>
+      </div>
+    </nav>
   </div>
 
   <script>
-    // ===== ДАННЫЕ: разделы и материалы под твой бренд =====
-    // ВАЖНО: везде, где написано ВАШ_КАНАЛ / ВАШ_НИК — потом заменишь на реальные ссылки.
-
-    const sections = [
+    // ------ ДАННЫЕ ПОСТОВ ------
+    // Здесь ты потом сможешь ДОБАВЛЯТЬ свои посты.
+    // Каждый пост — один объект в массиве posts.
+    const posts = [
       {
-        id: "marketing",
-        title: "Маркетинг",
-        tag: "Marketing",
-        filter: "marketing",
-        count: 4,
-        description: "Реклама, трафик, рост бизнеса, работа с базой клиентов.",
-        items: [
-          {
-            title: "Почему вы не используете доступные ресурсы",
-            meta: "#работа · пост",
-            url: "https://t.me/ВАШ_КАНАЛ/1"
-          },
-          {
-            title: "3 продукта, которые должен иметь каждый бизнес",
-            meta: "#маркетинг · разбор",
-            url: "https://t.me/ВАШ_КАНАЛ/2"
-          },
-          {
-            title: "Тирания выбора и как бизнесу с этим жить",
-            meta: "#работа · аналитика",
-            url: "https://t.me/ВАШ_КАНАЛ/3"
-          },
-          {
-            title: "Как продвигать мероприятия и окупать рекламу",
-            meta: "#маркетинг · гайд",
-            url: "https://t.me/ВАШ_КАНАЛ/4"
-          }
-        ]
-      },
-      {
-        id: "cases",
-        title: "Кейсы и работа",
-        tag: "Cases",
-        filter: "sales",
-        count: 2,
-        description: "Реальные проекты, цифры и результаты.",
-        items: [
-          {
-            title: "Кейс: кафе на доставке (+6000 ₽ за неделю)",
-            meta: "#работа · реальный кейс",
-            url: "https://t.me/ВАШ_КАНАЛ/5"
-          },
-          {
-            title: "50+ мероприятий за 4 года",
-            meta: "#работа · фестивали, выставки, гонки",
-            url: "https://t.me/ВАШ_КАНАЛ/6"
-          }
-        ]
-      },
-      {
-        id: "thinking",
-        title: "Мысли и жизнь",
-        tag: "Mindset",
-        filter: "thinking",
-        count: 3,
-        description: "Личное, философия, привычки, наблюдения.",
-        items: [
-          {
-            title: "Сумасшедший: почему жить по-своему — нормально",
-            meta: "#мысли · пост",
-            url: "https://t.me/ВАШ_КАНАЛ/7"
-          },
-          {
-            title: "Чистка зубов левой рукой и сила привычек",
-            meta: "#мысли · привычки",
-            url: "https://t.me/ВАШ_КАНАЛ/8"
-          },
-          {
-            title: "Привычки, которые управляют вашей жизнью",
-            meta: "#мысли · разбор",
-            url: "https://t.me/ВАШ_КАНАЛ/9"
-          }
-        ]
-      },
-      {
-        id: "books",
-        title: "Книги и фильмы",
-        tag: "Books",
-        filter: "ai",
-        count: 1,
-        description: "Книги и кино, которые влияют на мышление.",
-        items: [
-          {
-            title: "«Меня не сломать» Дэвида Гоггинса — мой разбор",
-            meta: "#книги · обзор",
-            url: "https://t.me/ВАШ_КАНАЛ/10"
-          }
-        ]
-      },
-      {
-        id: "guides",
-        title: "Гайды и инструменты",
-        tag: "Guides",
-        filter: "all",
-        count: 2,
-        description: "Файлы, чеклисты и инструменты, которые можно применить сразу.",
-        items: [
-          {
-            title: "Таблица: способы продвижения мероприятий",
-            meta: "Google Sheets · гайд",
-            url: "https://docs.google.com/spreadsheets/d/1dHKrl_4AQ-TDmaRFRG3btJ7W-PyqmALFr41JYGoK8yU/edit?usp=sharing"
-          },
-          {
-            title: "Сборник рекламных инструментов для оффлайн-бизнеса",
-            meta: "#маркетинг · подборка",
-            url: "https://t.me/ВАШ_КАНАЛ/11"
-          }
-        ]
-      },
-      {
-        id: "services",
-        title: "Услуги",
-        tag: "Services",
-        filter: "all",
-        count: 3,
-        description: "Чем я могу быть полезен вашему бизнесу.",
-        items: [
-          {
-            title: "Трафик и лидогенерация",
-            meta: "Яндекс, VK, Telegram, Google и др.",
-            url: "https://t.me/ВАШ_НИК"
-          },
-          {
-            title: "Аудит бизнеса и рекламы",
-            meta: "диагностика, точки роста, стратегия",
-            url: "https://t.me/ВАШ_НИК"
-          },
-          {
-            title: "Личная консультация",
-            meta: "разбор, стратегия, ответы на вопросы",
-            url: "https://t.me/ВАШ_НИК"
-          }
-        ]
-      },
-      {
-        id: "contacts",
-        title: "Контакты",
-        tag: "Contacts",
-        filter: "all",
-        count: 4,
-        description: "Все способы связаться и поддержать.",
-        items: [
-          {
-            title: "Написать мне в Telegram",
-            meta: "@ВАШ_НИК",
-            url: "https://t.me/ВАШ_НИК"
-          },
-          {
-            title: "Instagram*",
-            meta: "личный профиль",
-            url: "https://instagram.com/ВАШ_НИК"
-          },
-          {
-            title: "VK",
-            meta: "страница / сообщество",
-            url: "https://vk.com/ВАШ_НИК"
-          },
-          {
-            title: "Поддержать канал голосом",
-            meta: "рейтинг / голосование",
-            url: "https://t.me/ССЫЛКА_НА_ГОЛОСОВАНИЕ"
-          }
-        ]
-      }
-    ];
-
-    const recentItems = [
-      {
+        id: "resources",
         title: "Почему вы не используете доступные ресурсы",
-        meta: "#работа · свежий пост",
-        url: "https://t.me/ВАШ_КАНАЛ/1"
+        excerpt:
+          "История про кафе, которое не было подключено к сервисам доставки и теряло деньги.",
+        category: "marketing",
+        tagLabel: "#работа · свежий пост",
+        emoji: "📈",
+        minutes: 4
       },
       {
+        id: "three-products",
         title: "3 продукта, которые должен иметь каждый бизнес",
-        meta: "#маркетинг · полезное",
-        url: "https://t.me/ВАШ_КАНАЛ/2"
+        excerpt:
+          "Продукт для рекламы, продукт для продажи и продукт, который приносит основную прибыль.",
+        category: "marketing",
+        tagLabel: "#маркетинг · полезное",
+        emoji: "🧩",
+        minutes: 5
       },
       {
-        title: "«Меня не сломать» — мой разбор книги",
-        meta: "#книги · обзор",
-        url: "https://t.me/ВАШ_КАНАЛ/10"
+        id: "goggins-book",
+        title: "Книга «Меня не сломать» — мой разбор",
+        excerpt:
+          "Про борьбу с собой, истинный предел возможностей и взгляд на книгу как на PR-кампанию ВМС США.",
+        category: "books",
+        tagLabel: "#книги · обзор",
+        emoji: "📚",
+        minutes: 7
+      },
+      {
+        id: "habits-left-hand",
+        title: "Привычки и чистка зубов левой рукой",
+        excerpt:
+          "Как одно упражнение превратилось в автоматическую привычку и что это говорит о мозге.",
+        category: "mindset",
+        tagLabel: "#мысли",
+        emoji: "💭",
+        minutes: 4
+      },
+      {
+        id: "tyranny-of-choice",
+        title: "Тирания выбора и как с ней работать бизнесу",
+        excerpt:
+          "Почему клиентам сложно выбирать среди сотен вариантов и что с этим делать предпринимателю.",
+        category: "marketing",
+        tagLabel: "#работа",
+        emoji: "🧠",
+        minutes: 6
+      },
+      {
+        id: "events-promo",
+        title: "Как продвигать мероприятие и окупать рекламу",
+        excerpt:
+          "Опыт продвижения более 50 фестивалей и концертов и системный подход к инструментам.",
+        category: "cases",
+        tagLabel: "#маркетинг · кейс",
+        emoji: "🎪",
+        minutes: 8
       }
     ];
 
-    const cardsGrid = document.getElementById("cardsGrid");
-    const recentList = document.getElementById("recentList");
-    const sectionScreen = document.getElementById("sectionScreen");
-    const homeScreen = document.getElementById("homeScreen");
-    const sectionTitle = document.getElementById("sectionTitle");
-    const sectionDescription = document.getElementById("sectionDescription");
-    const sectionList = document.getElementById("sectionList");
-    const backBtn = document.getElementById("backBtn");
+    // ------ СОСТОЯНИЕ ------
+    let currentFilter = "all";
+    let searchQuery = "";
+    let favorites = new Set();
+    let currentModalPostId = null;
 
-    function renderCards(filter = "all") {
-      cardsGrid.innerHTML = "";
-      sections
-        .filter(sec => filter === "all" || sec.filter === filter)
-        .forEach(sec => {
-          const card = document.createElement("div");
-          card.className = "card";
-          card.dataset.sectionId = sec.id;
-          card.innerHTML = `
-            <div class="card-tag">${sec.tag}</div>
-            <div>
-              <div class="card-title">${sec.title}</div>
-              <div class="card-sub">${sec.description}</div>
-            </div>
-            <div class="card-count">${sec.count}</div>
-          `;
-          cardsGrid.appendChild(card);
-        });
+    // Загрузка избранного из localStorage
+    const saved = localStorage.getItem("orm_favorites");
+    if (saved) {
+      try {
+        const arr = JSON.parse(saved);
+        favorites = new Set(arr);
+      } catch (e) {}
+    }
+
+    // ------ РЕНДЕР ПОСТОВ ------
+    const recentContainer = document.getElementById("recent-posts");
+    const favoritesContainer = document.getElementById("favorites-list");
+    const favoritesEmpty = document.getElementById("favorites-empty");
+
+    function matchesFilter(post) {
+      if (currentFilter === "all") return true;
+      return post.category === currentFilter;
+    }
+
+    function matchesSearch(post) {
+      if (!searchQuery.trim()) return true;
+      const q = searchQuery.toLowerCase();
+      return (
+        post.title.toLowerCase().includes(q) ||
+        post.excerpt.toLowerCase().includes(q)
+      );
+    }
+
+    function createPostCard(post) {
+      const isFav = favorites.has(post.id);
+      const card = document.createElement("article");
+      card.className = "post-card";
+      card.dataset.postId = post.id;
+
+      card.innerHTML = `
+        <div class="post-card-header">
+          <div class="post-card-emoji">${post.emoji || "✨"}</div>
+          <div class="post-card-tag">${post.tagLabel}</div>
+        </div>
+        <div class="post-card-body">
+          <div class="post-card-title">${post.title}</div>
+          <div class="post-card-excerpt">${post.excerpt}</div>
+          <div class="post-card-meta">
+            <span>${post.minutes} мин чтения</span>
+            <span>${
+              post.category === "marketing"
+                ? "Маркетинг"
+                : post.category === "cases"
+                ? "Кейсы"
+                : post.category === "mindset"
+                ? "Мысли"
+                : post.category === "books"
+                ? "Книги"
+                : "Гайды"
+            }</span>
+          </div>
+          <div class="post-card-actions">
+            <button class="btn btn-ghost ${
+              isFav ? "active" : ""
+            }" data-role="fav-btn">
+              <span>${isFav ? "⭐ В избранном" : "☆ В избранное"}</span>
+            </button>
+            <button class="btn btn-primary" data-role="read-btn">
+              Читать
+            </button>
+          </div>
+        </div>
+      `;
+
+      return card;
     }
 
     function renderRecent() {
-      recentList.innerHTML = "";
-      recentItems.forEach(item => {
-        const el = document.createElement("div");
-        el.className = "item";
-        el.innerHTML = `
-          <div class="item-title">${item.title}</div>
-          <div class="item-meta">${item.meta}</div>
-        `;
-        if (item.url) {
-          el.addEventListener("click", () => {
-            window.open(item.url, "_blank");
-          });
-        }
-        recentList.appendChild(el);
+      recentContainer.innerHTML = "";
+      const filtered = posts.filter(
+        (p) => matchesFilter(p) && matchesSearch(p)
+      );
+      filtered.forEach((post) => {
+        recentContainer.appendChild(createPostCard(post));
+      });
+      if (!filtered.length) {
+        const empty = document.createElement("div");
+        empty.style.fontSize = "12px";
+        empty.style.color = "var(--text-muted)";
+        empty.textContent =
+          "По этому запросу пока нет постов. Попробуй изменить фильтр или поиск.";
+        recentContainer.appendChild(empty);
+      }
+    }
+
+    function renderFavorites() {
+      favoritesContainer.innerHTML = "";
+      const favPosts = posts.filter((p) => favorites.has(p.id));
+      if (!favPosts.length) {
+        favoritesEmpty.style.display = "block";
+        return;
+      }
+      favoritesEmpty.style.display = "none";
+      favPosts.forEach((post) => {
+        favoritesContainer.appendChild(createPostCard(post));
       });
     }
 
-    renderCards();
-    renderRecent();
-
-    cardsGrid.addEventListener("click", e => {
-      const card = e.target.closest(".card");
-      if (!card) return;
-      const id = card.dataset.sectionId;
-      const sec = sections.find(s => s.id === id);
-      if (!sec) return;
-
-      sectionTitle.textContent = sec.title;
-      sectionDescription.textContent = sec.description;
-      sectionList.innerHTML = "";
-      sec.items.forEach(item => {
-        const el = document.createElement("div");
-        el.className = "item";
-        el.innerHTML = `
-          <div class="item-title">${item.title}</div>
-          <div class="item-meta">${item.meta}</div>
-        `;
-        if (item.url) {
-          el.addEventListener("click", () => {
-            window.open(item.url, "_blank");
-          });
-        }
-        sectionList.appendChild(el);
-      });
-
-      homeScreen.classList.remove("active");
-      sectionScreen.classList.add("active");
-    });
-
-    backBtn.addEventListener("click", () => {
-      sectionScreen.classList.remove("active");
-      homeScreen.classList.add("active");
-    });
-
-    document.getElementById("chips").addEventListener("click", e => {
-      const chip = e.target.closest(".chip");
-      if (!chip) return;
-      document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
-      chip.classList.add("active");
-      const filter = chip.dataset.filter;
-      renderCards(filter);
-    });
-
-    function showScreen(id) {
-      document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
-      document.getElementById(id).classList.add("active");
-      document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
-      const btn = document.querySelector(`.nav-btn[data-screen="${id}"]`);
-      if (btn) btn.classList.add("active");
+    function saveFavorites() {
+      localStorage.setItem("orm_favorites", JSON.stringify([...favorites]));
     }
 
-    document.querySelectorAll(".nav-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const id = btn.dataset.screen;
-        if (id === "homeScreen") {
-          sectionScreen.classList.remove("active");
-          homeScreen.classList.add("active");
+    // ------ ОБНОВЛЕНИЕ СЧЁТЧИКОВ РАЗДЕЛОВ ------
+    function updateCounts() {
+      const counts = {
+        marketing: 0,
+        cases: 0,
+        mindset: 0,
+        books: 0,
+        guides: 0
+      };
+      posts.forEach((p) => {
+        if (counts[p.category] !== undefined) {
+          counts[p.category]++;
         }
-        showScreen(id);
       });
-    });
+      document.getElementById("count-marketing").textContent =
+        counts.marketing;
+      document.getElementById("count-cases").textContent = counts.cases;
+      document.getElementById("count-mindset").textContent = counts.mindset;
+      document.getElementById("count-books").textContent = counts.books;
+      document.getElementById("count-guides").textContent = counts.guides;
+    }
 
-    const searchInput = document.getElementById("searchInput");
-    searchInput.addEventListener("input", () => {
-      const q = searchInput.value.toLowerCase().trim();
-      if (!q) {
-        renderCards(document.querySelector(".chip.active").dataset.filter);
+    // ------ ФИЛЬТРЫ ------
+    document.querySelectorAll(".chip").forEach((chip) => {
+      chip.addEventListener("click", () => {
+        document.querySelectorAll(".chip").forEach((c) =>
+          c.classList.remove("active")
+        );
+        chip.classList.add("active");
+        currentFilter = chip.dataset.filter;
         renderRecent();
+      });
+    });
+
+    // Клик по карточкам навигатора — просто переключает фильтр
+    document.querySelectorAll(".nav-card").forEach((card) => {
+      const target = card.dataset.filterTarget;
+      if (!target) return;
+      card.addEventListener("click", () => {
+        if (target === "services") {
+          switchView("services");
+          return;
+        }
+        if (target === "contacts") {
+          switchView("channel");
+          return;
+        }
+        currentFilter = target;
+        document.querySelectorAll(".chip").forEach((c) =>
+          c.classList.remove("active")
+        );
+        const chip = document.querySelector(`.chip[data-filter="${target}"]`);
+        if (chip) chip.classList.add("active");
+        switchView("home");
+        renderRecent();
+        // Прокрутка к блоку "Недавно добавлено"
+        const section = document.querySelector(
+          ".section:nth-of-type(2)"
+        );
+        if (section) {
+          section.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      });
+    });
+
+    // ------ ПОИСК ------
+    const searchInput = document.getElementById("search-input");
+    searchInput.addEventListener("input", (e) => {
+      searchQuery = e.target.value || "";
+      renderRecent();
+    });
+
+    // ------ ОБРАБОТКА КЛИКОВ ПО КАРТОЧКАМ ------
+    function handlePostCardClick(e) {
+      const card = e.target.closest(".post-card");
+      if (!card) return;
+      const postId = card.dataset.postId;
+      const post = posts.find((p) => p.id === postId);
+      if (!post) return;
+
+      if (e.target.closest('[data-role="fav-btn"]')) {
+        if (favorites.has(post.id)) {
+          favorites.delete(post.id);
+        } else {
+          favorites.add(post.id);
+        }
+        saveFavorites();
+        renderRecent();
+        renderFavorites();
+        // Если открыт модал с этим постом — обновим кнопку там
+        if (currentModalPostId === post.id) {
+          updateModalFavButton();
+        }
         return;
       }
 
-      cardsGrid.innerHTML = "";
-      sections
-        .filter(sec =>
-          sec.title.toLowerCase().includes(q) ||
-          sec.description.toLowerCase().includes(q)
-        )
-        .forEach(sec => {
-          const card = document.createElement("div");
-          card.className = "card";
-          card.dataset.sectionId = sec.id;
-          card.innerHTML = `
-            <div class="card-tag">${sec.tag}</div>
-            <div>
-              <div class="card-title">${sec.title}</div>
-              <div class="card-sub">${sec.description}</div>
-            </div>
-            <div class="card-count">${sec.count}</div>
-          `;
-          cardsGrid.appendChild(card);
-        });
+      if (e.target.closest('[data-role="read-btn"]')) {
+        openModal(post);
+      }
+    }
 
-      recentList.innerHTML = "";
-      recentItems
-        .filter(item => item.title.toLowerCase().includes(q))
-        .forEach(item => {
-          const el = document.createElement("div");
-          el.className = "item";
-          el.innerHTML = `
-            <div class="item-title">${item.title}</div>
-            <div class="item-meta">${item.meta}</div>
-          `;
-          if (item.url) {
-            el.addEventListener("click", () => {
-              window.open(item.url, "_blank");
-            });
-          }
-          recentList.appendChild(el);
-        });
+    recentContainer.addEventListener("click", handlePostCardClick);
+    favoritesContainer.addEventListener("click", handlePostCardClick);
+
+    // ------ МОДАЛ ------
+    const modalBackdrop = document.getElementById("modal-backdrop");
+    const modalTitle = document.getElementById("modal-title");
+    const modalMeta = document.getElementById("modal-meta");
+    const modalBody = document.getElementById("modal-body");
+    const modalClose = document.getElementById("modal-close");
+    const modalFavBtn = document.getElementById("modal-fav-btn");
+    const modalReadBtn = document.getElementById("modal-read-btn");
+
+    function updateModalFavButton() {
+      if (!currentModalPostId) return;
+      const isFav = favorites.has(currentModalPostId);
+      modalFavBtn.classList.toggle("active", isFav);
+      modalFavBtn.textContent = isFav
+        ? "⭐ В избранном"
+        : "☆ В избранное";
+    }
+
+    function openModal(post) {
+      currentModalPostId = post.id;
+      modalTitle.textContent = post.title;
+      modalMeta.textContent = `${post.minutes} мин чтения · ${
+        post.category === "marketing"
+          ? "Маркетинг"
+          : post.category === "cases"
+          ? "Кейсы"
+          : post.category === "mindset"
+          ? "Мысли"
+          : post.category === "books"
+          ? "Книги"
+          : "Гайды"
+      }`;
+      modalBody.textContent = post.excerpt;
+      updateModalFavButton();
+      modalBackdrop.style.display = "flex";
+    }
+
+    function closeModal() {
+      modalBackdrop.style.display = "none";
+      currentModalPostId = null;
+    }
+
+    modalClose.addEventListener("click", closeModal);
+    modalBackdrop.addEventListener("click", (e) => {
+      if (e.target === modalBackdrop) closeModal();
     });
+
+    modalFavBtn.addEventListener("click", () => {
+      if (!currentModalPostId) return;
+      if (favorites.has(currentModalPostId)) {
+        favorites.delete(currentModalPostId);
+      } else {
+        favorites.add(currentModalPostId);
+      }
+      saveFavorites();
+      renderRecent();
+      renderFavorites();
+      updateModalFavButton();
+    });
+
+    modalReadBtn.addEventListener("click", () => {
+      // Здесь можно будет добавить, например, более длинный текст или развёрнутый формат.
+      // Пока оставляем кнопку "Читать" как подтверждение/закрытие.
+      closeModal();
+    });
+
+    // ------ BOTTOM NAV ------
+    function switchView(target) {
+      document.querySelectorAll(".view").forEach((v) =>
+        v.classList.remove("active")
+      );
+      const el = document.getElementById(`view-${target}`);
+      if (el) el.classList.add("active");
+
+      document.querySelectorAll(".nav-item").forEach((n) =>
+        n.classList.remove("active")
+      );
+      const nav = document.querySelector(`.nav-item[data-view="${target}"]`);
+      if (nav) nav.classList.add("active");
+      window.scrollTo({ top: 0, behavior: "instant" });
+    }
+
+    document.querySelectorAll(".nav-item").forEach((item) => {
+      item.addEventListener("click", () => {
+        const target = item.dataset.view;
+        switchView(target);
+      });
+    });
+
+    // ------ ИНИЦИАЛИЗАЦИЯ ------
+    updateCounts();
+    renderRecent();
+    renderFavorites();
   </script>
 </body>
 </html>
