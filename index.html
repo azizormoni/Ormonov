@@ -77,12 +77,17 @@
       height: 100%;
       border-radius: 50%;
       background: #050816;
+      overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: 700;
-      font-size: 22px;
-      color: var(--accent-soft);
+    }
+
+    .hero-avatar-inner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
 
     .hero-main {
@@ -211,7 +216,7 @@
       font-size: 13px;
       letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: rgba(148, 163, 184, 0.9);
+      color:rgba(148, 163, 184, 0.9);
     }
 
     .section-subtitle {
@@ -505,7 +510,7 @@
       display: block;
     }
 
-    /* ABOUT & SERVICES & FAVORITES */
+    /* ABOUT & SERVICES & FAVORITES & CATEGORY */
 
     .card-page {
       background: linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.93));
@@ -652,7 +657,11 @@
     <section class="view active" id="view-home">
       <div class="hero">
         <div class="hero-avatar">
-          <div class="hero-avatar-inner">O</div>
+          <div class="hero-avatar-inner">
+            <!-- СЮДА ВСТАВЛЯЕШЬ СВОЁ ФОТО -->
+            <!-- Положи файл avatar.jpg рядом с этим файлом или подставь свою ссылку -->
+            <img src="avatar.jpg" alt="Азиз Ормонов" />
+          </div>
         </div>
         <div class="hero-main">
           <div class="hero-title">Ormonov · Навигатор по блогу</div>
@@ -823,9 +832,7 @@
             </div>
           </div>
         </div>
-        <div class="posts-list" id="recent-posts">
-          <!-- Карточки постов будут подставляться из JS -->
-        </div>
+        <div class="posts-list" id="recent-posts"></div>
       </section>
     </section>
 
@@ -859,7 +866,6 @@
           <a class="link-chip" href="https://t.me/ormonovpro" target="_blank" rel="noopener">
             📲 Telegram-канал
           </a>
-          <!-- сюда позже можно добавить Instagram, VK и др. -->
         </div>
       </div>
     </section>
@@ -914,7 +920,7 @@
     <!-- CHANNEL VIEW -->
     <section class="view" id="view-channel">
       <div class="card-page">
-        <div class="page-title">Канал Ormonov·Про маркетинг</div>
+        <div class="page-title">Канал Ormonov · Про маркетинг</div>
         <div class="page-subtitle">
           Канал о маркетинге, проектах, с которыми работаю, лайфхаках, спорте и жизни.
         </div>
@@ -925,6 +931,15 @@
         <a class="link-chip" href="https://t.me/ormonovpro" target="_blank" rel="noopener">
           🔗 Перейти в канал
         </a>
+      </div>
+    </section>
+
+    <!-- CATEGORY VIEW (для рубрик) -->
+    <section class="view" id="view-category">
+      <div class="card-page">
+        <div class="page-title" id="category-title"></div>
+        <div class="page-subtitle" id="category-subtitle"></div>
+        <div class="posts-list" id="category-posts"></div>
       </div>
     </section>
 
@@ -942,7 +957,7 @@
             ⭐ В избранное
           </button>
           <button class="btn btn-primary" id="modal-read-btn">
-            Читать
+            Читать в канале
           </button>
         </div>
       </div>
@@ -977,8 +992,7 @@
 
   <script>
     // ------ ДАННЫЕ ПОСТОВ ------
-    // Здесь ты потом сможешь ДОБАВЛЯТЬ свои посты.
-    // Каждый пост — один объект в массиве posts.
+    // Добавь сюда ссылки на реальные посты в канале (url)
     const posts = [
       {
         id: "resources",
@@ -988,7 +1002,8 @@
         category: "marketing",
         tagLabel: "#работа · свежий пост",
         emoji: "📈",
-        minutes: 4
+        minutes: 4,
+        url: "https://t.me/ormonovpro/1" // замени на реальный ID поста
       },
       {
         id: "three-products",
@@ -998,7 +1013,8 @@
         category: "marketing",
         tagLabel: "#маркетинг · полезное",
         emoji: "🧩",
-        minutes: 5
+        minutes: 5,
+        url: "https://t.me/ormonovpro/2"
       },
       {
         id: "goggins-book",
@@ -1008,7 +1024,8 @@
         category: "books",
         tagLabel: "#книги · обзор",
         emoji: "📚",
-        minutes: 7
+        minutes: 7,
+        url: "https://t.me/ormonovpro/3"
       },
       {
         id: "habits-left-hand",
@@ -1018,7 +1035,8 @@
         category: "mindset",
         tagLabel: "#мысли",
         emoji: "💭",
-        minutes: 4
+        minutes: 4,
+        url: "https://t.me/ormonovpro/4"
       },
       {
         id: "tyranny-of-choice",
@@ -1028,7 +1046,8 @@
         category: "marketing",
         tagLabel: "#работа",
         emoji: "🧠",
-        minutes: 6
+        minutes: 6,
+        url: "https://t.me/ormonovpro/5"
       },
       {
         id: "events-promo",
@@ -1038,9 +1057,33 @@
         category: "cases",
         tagLabel: "#маркетинг · кейс",
         emoji: "🎪",
-        minutes: 8
+        minutes: 8,
+        url: "https://t.me/ormonovpro/6"
       }
     ];
+
+    const categoryMeta = {
+      marketing: {
+        title: "Маркетинг",
+        subtitle: "Реклама, трафик, стратегии и рост бизнеса."
+      },
+      cases: {
+        title: "Кейсы и работа",
+        subtitle: "Реальные проекты, цифры и результаты."
+      },
+      mindset: {
+        title: "Мысли и жизнь",
+        subtitle: "Личное, философия, привычки и наблюдения."
+      },
+      books: {
+        title: "Книги и фильмы",
+        subtitle: "Книги, которые читаю, и фильмы, которые рекомендую."
+      },
+      guides: {
+        title: "Гайды и инструменты",
+        subtitle: "Файлы, чек-листы и инструменты для практики."
+      }
+    };
 
     // ------ СОСТОЯНИЕ ------
     let currentFilter = "all";
@@ -1048,19 +1091,20 @@
     let favorites = new Set();
     let currentModalPostId = null;
 
-    // Загрузка избранного из localStorage
     const saved = localStorage.getItem("orm_favorites");
     if (saved) {
       try {
-        const arr = JSON.parse(saved);
-        favorites = new Set(arr);
+        favorites = new Set(JSON.parse(saved));
       } catch (e) {}
     }
 
-    // ------ РЕНДЕР ПОСТОВ ------
+    // Элементы
     const recentContainer = document.getElementById("recent-posts");
     const favoritesContainer = document.getElementById("favorites-list");
     const favoritesEmpty = document.getElementById("favorites-empty");
+    const categoryContainer = document.getElementById("category-posts");
+    const categoryTitleEl = document.getElementById("category-title");
+    const categorySubtitleEl = document.getElementById("category-subtitle");
 
     function matchesFilter(post) {
       if (currentFilter === "all") return true;
@@ -1105,9 +1149,7 @@
             }</span>
           </div>
           <div class="post-card-actions">
-            <button class="btn btn-ghost ${
-              isFav ? "active" : ""
-            }" data-role="fav-btn">
+            <button class="btn btn-ghost ${isFav ? "active" : ""}" data-role="fav-btn">
               <span>${isFav ? "⭐ В избранном" : "☆ В избранное"}</span>
             </button>
             <button class="btn btn-primary" data-role="read-btn">
@@ -1122,12 +1164,7 @@
 
     function renderRecent() {
       recentContainer.innerHTML = "";
-      const filtered = posts.filter(
-        (p) => matchesFilter(p) && matchesSearch(p)
-      );
-      filtered.forEach((post) => {
-        recentContainer.appendChild(createPostCard(post));
-      });
+      const filtered = posts.filter(p => matchesFilter(p) && matchesSearch(p));
       if (!filtered.length) {
         const empty = document.createElement("div");
         empty.style.fontSize = "12px";
@@ -1135,27 +1172,40 @@
         empty.textContent =
           "По этому запросу пока нет постов. Попробуй изменить фильтр или поиск.";
         recentContainer.appendChild(empty);
+        return;
       }
+      filtered.forEach(post => recentContainer.appendChild(createPostCard(post)));
     }
 
     function renderFavorites() {
       favoritesContainer.innerHTML = "";
-      const favPosts = posts.filter((p) => favorites.has(p.id));
+      const favPosts = posts.filter(p => favorites.has(p.id));
       if (!favPosts.length) {
         favoritesEmpty.style.display = "block";
         return;
       }
       favoritesEmpty.style.display = "none";
-      favPosts.forEach((post) => {
-        favoritesContainer.appendChild(createPostCard(post));
-      });
+      favPosts.forEach(post => favoritesContainer.appendChild(createPostCard(post)));
+    }
+
+    function renderCategory(category) {
+      categoryContainer.innerHTML = "";
+      const filtered = posts.filter(p => p.category === category);
+      filtered.forEach(post => categoryContainer.appendChild(createPostCard(post)));
+      if (!filtered.length) {
+        const empty = document.createElement("div");
+        empty.style.fontSize = "12px";
+        empty.style.color = "var(--text-muted)";
+        empty.textContent = "Пока в этой рубрике нет постов.";
+        categoryContainer.appendChild(empty);
+      }
     }
 
     function saveFavorites() {
       localStorage.setItem("orm_favorites", JSON.stringify([...favorites]));
     }
 
-    // ------ ОБНОВЛЕНИЕ СЧЁТЧИКОВ РАЗДЕЛОВ ------
+    // Счётчики разделов
     function updateCounts() {
       const counts = {
         marketing: 0,
@@ -1164,33 +1214,70 @@
         books: 0,
         guides: 0
       };
-      posts.forEach((p) => {
-        if (counts[p.category] !== undefined) {
-          counts[p.category]++;
-        }
+      posts.forEach(p => {
+        if (counts[p.category] !== undefined) counts[p.category]++;
       });
-      document.getElementById("count-marketing").textContent =
-        counts.marketing;
+      document.getElementById("count-marketing").textContent = counts.marketing;
       document.getElementById("count-cases").textContent = counts.cases;
       document.getElementById("count-mindset").textContent = counts.mindset;
       document.getElementById("count-books").textContent = counts.books;
       document.getElementById("count-guides").textContent = counts.guides;
     }
 
-    // ------ ФИЛЬТРЫ ------
-    document.querySelectorAll(".chip").forEach((chip) => {
-      chip.addEventListener("click", () => {
-        document.querySelectorAll(".chip").forEach((c) =>
-          c.classList.remove("active")
-        );
-        chip.classList.add("active");
-        currentFilter = chip.dataset.filter;
-        renderRecent();
+    // Переключение view
+    function switchView(target) {
+      document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+      const el = document.getElementById(`view-${target}`);
+      if (el) el.classList.add("active");
+
+      document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
+      const nav = document.querySelector(`.nav-item[data-view="${target}"]`);
+      if (nav) nav.classList.add("active");
+
+      window.scrollTo({ top: 0, behavior: "instant" });
+    }
+
+    document.querySelectorAll(".nav-item").forEach(item => {
+      item.addEventListener("click", () => {
+        const target = item.dataset.view;
+        switchView(target);
       });
     });
 
-    // Клик по карточкам навигатора — просто переключает фильтр
-    document.querySelectorAll(".nav-card").forEach((card) => {
+    // Открытие рубрики
+    function openCategory(category) {
+      const meta = categoryMeta[category];
+      if (meta) {
+        categoryTitleEl.textContent = meta.title;
+        categorySubtitleEl.textContent = meta.subtitle;
+      } else {
+        categoryTitleEl.textContent = "Рубрика";
+        categorySubtitleEl.textContent = "";
+      }
+      renderCategory(category);
+      switchView("category");
+    }
+
+    // Фильтры-чипы: "Все" — домой, остальные — отдельный экран
+    document.querySelectorAll(".chip").forEach(chip => {
+      chip.addEventListener("click", () => {
+        document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+        chip.classList.add("active");
+        const filter = chip.dataset.filter;
+
+        if (filter === "all") {
+          currentFilter = "all";
+          switchView("home");
+          renderRecent();
+        } else {
+          currentFilter = filter;
+          openCategory(filter);
+        }
+      });
+    });
+
+    // Клик по карточкам навигатора — тоже отдельный экран рубрики
+    document.querySelectorAll(".nav-card").forEach(card => {
       const target = card.dataset.filterTarget;
       if (!target) return;
       card.addEventListener("click", () => {
@@ -1202,37 +1289,35 @@
           switchView("channel");
           return;
         }
-        currentFilter = target;
-        document.querySelectorAll(".chip").forEach((c) =>
-          c.classList.remove("active")
-        );
+        document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
         const chip = document.querySelector(`.chip[data-filter="${target}"]`);
         if (chip) chip.classList.add("active");
-        switchView("home");
-        renderRecent();
-        // Прокрутка к блоку "Недавно добавлено"
-        const section = document.querySelector(
-          ".section:nth-of-type(2)"
-        );
-        if (section) {
-          section.scrollIntoView({ behavior: "smooth", block: "start" });
-        }
+        openCategory(target);
       });
     });
 
-    // ------ ПОИСК ------
+    // Поиск (работает на домашнем экране по блоку "Недавно добавлено")
     const searchInput = document.getElementById("search-input");
-    searchInput.addEventListener("input", (e) => {
+    searchInput.addEventListener("input", e => {
       searchQuery = e.target.value || "";
       renderRecent();
     });
 
-    // ------ ОБРАБОТКА КЛИКОВ ПО КАРТОЧКАМ ------
+    // Открытие поста в канале
+    function openPostUrl(post) {
+      if (post.url) {
+        window.open(post.url, "_blank");
+      } else {
+        openModal(post);
+      }
+    }
+
+    // Обработка кликов по карточкам
     function handlePostCardClick(e) {
       const card = e.target.closest(".post-card");
       if (!card) return;
       const postId = card.dataset.postId;
-      const post = posts.find((p) => p.id === postId);
+      const post = posts.find(p => p.id === postId);
       if (!post) return;
 
       if (e.target.closest('[data-role="fav-btn"]')) {
@@ -1244,20 +1329,23 @@
         saveFavorites();
         renderRecent();
         renderFavorites();
-        // Если открыт модал с этим постом — обновим кнопку там
-        if (currentModalPostId === post.id) {
-          updateModalFavButton();
-        }
+        renderCategory(post.category);
+        if (currentModalPostId === post.id) updateModalFavButton();
         return;
       }
 
       if (e.target.closest('[data-role="read-btn"]')) {
-        openModal(post);
+        if (post.url) {
+          openPostUrl(post);
+        } else {
+          openModal(post);
+        }
       }
     }
 
     recentContainer.addEventListener("click", handlePostCardClick);
     favoritesContainer.addEventListener("click", handlePostCardClick);
+    categoryContainer.addEventListener("click", handlePostCardClick);
 
     // ------ МОДАЛ ------
     const modalBackdrop = document.getElementById("modal-backdrop");
@@ -1272,9 +1360,7 @@
       if (!currentModalPostId) return;
       const isFav = favorites.has(currentModalPostId);
       modalFavBtn.classList.toggle("active", isFav);
-      modalFavBtn.textContent = isFav
-        ? "⭐ В избранном"
-        : "☆ В избранное";
+      modalFavBtn.textContent = isFav ? "⭐ В избранном" : "☆ В избранное";
     }
 
     function openModal(post) {
@@ -1302,7 +1388,7 @@
     }
 
     modalClose.addEventListener("click", closeModal);
-    modalBackdrop.addEventListener("click", (e) => {
+    modalBackdrop.addEventListener("click", e => {
       if (e.target === modalBackdrop) closeModal();
     });
 
@@ -1316,39 +1402,19 @@
       saveFavorites();
       renderRecent();
       renderFavorites();
+      const post = posts.find(p => p.id === currentModalPostId);
+      if (post) renderCategory(post.category);
       updateModalFavButton();
     });
 
     modalReadBtn.addEventListener("click", () => {
-      // Здесь можно будет добавить, например, более длинный текст или развёрнутый формат.
-      // Пока оставляем кнопку "Читать" как подтверждение/закрытие.
+      if (!currentModalPostId) return;
+      const post = posts.find(p => p.id === currentModalPostId);
+      if (post) openPostUrl(post);
       closeModal();
     });
 
-    // ------ BOTTOM NAV ------
-    function switchView(target) {
-      document.querySelectorAll(".view").forEach((v) =>
-        v.classList.remove("active")
-      );
-      const el = document.getElementById(`view-${target}`);
-      if (el) el.classList.add("active");
-
-      document.querySelectorAll(".nav-item").forEach((n) =>
-        n.classList.remove("active")
-      );
-      const nav = document.querySelector(`.nav-item[data-view="${target}"]`);
-      if (nav) nav.classList.add("active");
-      window.scrollTo({ top: 0, behavior: "instant" });
-    }
-
-    document.querySelectorAll(".nav-item").forEach((item) => {
-      item.addEventListener("click", () => {
-        const target = item.dataset.view;
-        switchView(target);
-      });
-    });
-
-    // ------ ИНИЦИАЛИЗАЦИЯ ------
+    // ИНИЦИАЛИЗАЦИЯ
     updateCounts();
     renderRecent();
     renderFavorites();
